@@ -1,0 +1,531 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>台北市長適配測驗</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="20 個台北市政議題，看看沈伯洋和蔣萬安誰的立場跟你比較接近。每個立場都附公開來源。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap">
+<style>
+/* Layout: a single ballot-paper column; answers are vote-stamp circles; red ink only marks what the player chose. */
+:root {
+  --paper: #F5F5F1;
+  --surface: #FFFFFF;
+  --ink: #1D1E22;
+  --muted: #64656B;
+  --line: #D9D9D2;
+  --stamp: #C02A2A;
+  --stamp-soft: #F6E3E1;
+  --c-shen: #6F4A86;
+  --c-chiang: #9A640E;
+  --flag-bg: #FFF4D6;
+  --flag-fg: #6B4A00;
+  --font-display: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.1875rem;
+  --step-2: 1.5rem;
+  --step-3: 2rem;
+  --step-4: 2.625rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141519; --surface: #1C1D22; --ink: #EAE9E4; --muted: #A2A2A7; --line: #2F3036;
+    --stamp: #E35B50; --stamp-soft: #3A2220; --c-shen: #B892D2; --c-chiang: #D9A548;
+    --flag-bg: #3A3016; --flag-fg: #F1D58A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #141519; --surface: #1C1D22; --ink: #EAE9E4; --muted: #A2A2A7; --line: #2F3036;
+  --stamp: #E35B50; --stamp-soft: #3A2220; --c-shen: #B892D2; --c-chiang: #D9A548;
+  --flag-bg: #3A3016; --flag-fg: #F1D58A; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.stack { display: grid; gap: 28px; }
+html, body { margin: 0; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: var(--step-0); line-height: 1.7;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 680px; margin: 0 auto; padding-block: 28px 64px; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.3; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-underline-offset: 3px; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--stamp); outline-offset: 3px; }
+
+.eyebrow { font-size: var(--step--1); letter-spacing: .12em; color: var(--muted); }
+.disclosure {
+  font-size: var(--step--1); color: var(--muted);
+  border-top: 1px solid var(--line); padding-top: 12px;
+}
+.flag {
+  background: var(--flag-bg); color: var(--flag-fg);
+  font-size: var(--step--1); padding: 10px 14px; border-radius: 6px; line-height: 1.6;
+}
+
+/* Masthead */
+.mast { display: grid; gap: 10px; }
+.mast h1 { font-size: var(--step-4); font-weight: 900; letter-spacing: .02em; }
+.mast h1 .ring {
+  display: inline-grid; place-items: center; width: 1.15em; height: 1.15em;
+  border: .07em solid var(--stamp); color: var(--stamp); border-radius: 50%;
+  font-size: .8em; margin-left: .15em; vertical-align: .05em; transform: rotate(-8deg);
+}
+.lede { font-size: var(--step-1); color: var(--ink); max-width: 34em; }
+
+/* Buttons */
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  appearance: none; border: 1.5px solid var(--ink); background: var(--ink); color: var(--paper);
+  padding: 12px 22px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: var(--step-0);
+}
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn:hover { opacity: .88; }
+.btn small { font-weight: 400; opacity: .75; margin-left: 6px; }
+.linkbtn { appearance: none; border: 0; background: none; padding: 0; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font-size: var(--step--1); }
+
+.howto { display: grid; gap: 8px; padding: 0; margin: 0; list-style: none; }
+.howto li { display: grid; grid-template-columns: 1.8em 1fr; gap: 6px; }
+.howto li span:first-child { font-family: var(--font-display); color: var(--stamp); font-weight: 900; }
+
+/* Quiz */
+.progress { display: grid; gap: 8px; }
+.progress-meta { display: flex; justify-content: space-between; gap: 12px; font-size: var(--step--1); color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--ink); width: 0; transition: width .25s ease; }
+.dim-tag { display: inline-block; font-size: var(--step--1); border: 1px solid var(--line); padding: 1px 10px; border-radius: 999px; color: var(--muted); }
+.statement { font-size: var(--step-3); font-weight: 700; min-height: 3.2em; }
+.statement-bg { color: var(--muted); font-size: var(--step--1); }
+
+.scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; align-items: start; }
+.opt {
+  appearance: none; background: none; border: 0; cursor: pointer; padding: 6px 0;
+  display: grid; justify-items: center; gap: 8px; font-size: var(--step--1); color: var(--muted); line-height: 1.3; text-align: center;
+}
+.opt .dot {
+  width: var(--d); height: var(--d); border-radius: 50%; border: 2px solid var(--line);
+  background: var(--surface); display: grid; place-items: center; transition: transform .12s ease, border-color .12s ease;
+}
+.opt:hover .dot { border-color: var(--ink); }
+.opt[aria-pressed="true"] { color: var(--stamp); font-weight: 700; }
+.opt[aria-pressed="true"] .dot { border: 3px solid var(--stamp); background: var(--stamp-soft); transform: rotate(-10deg) scale(1.05); }
+.opt[aria-pressed="true"] .dot::after { content: "選"; font-family: var(--font-display); font-weight: 900; color: var(--stamp); font-size: calc(var(--d) * .42); }
+.opt:nth-child(1), .opt:nth-child(5) { --d: 52px; }
+.opt:nth-child(2), .opt:nth-child(4) { --d: 42px; }
+.opt:nth-child(3) { --d: 34px; }
+.scale-ends { display: flex; justify-content: space-between; font-size: var(--step--1); color: var(--muted); }
+
+.quiz-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; }
+.check { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: var(--step--1); }
+.check input { width: 18px; height: 18px; accent-color: var(--stamp); }
+.navrow { display: flex; gap: 18px; }
+
+/* Result */
+.persona {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 26px 22px; display: grid; gap: 10px; position: relative; overflow: hidden;
+}
+.persona .eyebrow { color: var(--stamp); }
+.persona h2 { font-size: var(--step-4); font-weight: 900; }
+.persona .seal {
+  position: absolute; right: -18px; top: -18px; width: 120px; height: 120px; border-radius: 50%;
+  border: 6px solid var(--stamp); opacity: .14; display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 900; font-size: 54px; color: var(--stamp); transform: rotate(-14deg);
+}
+.persona p { max-width: 32em; }
+
+.fit { display: grid; gap: 18px; }
+.fit h2, .detail h2, .method h2 { font-size: var(--step-2); }
+.fit-row { display: grid; gap: 6px; }
+.fit-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.fit-name { font-family: var(--font-display); font-weight: 900; font-size: var(--step-2); }
+.fit-name small { font-family: var(--font-body); font-weight: 400; font-size: var(--step--1); color: var(--muted); margin-left: 8px; }
+.fit-pct { font-family: var(--font-display); font-weight: 900; font-size: var(--step-3); font-variant-numeric: tabular-nums; }
+.fit-bar { height: 12px; background: var(--line); border-radius: 6px; overflow: hidden; }
+.fit-bar > i { display: block; height: 100%; border-radius: 6px; }
+.fit-note { font-size: var(--step--1); color: var(--muted); }
+
+.detail { display: grid; gap: 14px; }
+.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 16px 6px; display: grid; gap: 10px; min-width: 0; }
+.qcard h3 { font-family: var(--font-body); font-weight: 700; font-size: var(--step-0); line-height: 1.55; }
+.you { font-size: var(--step--1); }
+.you b { color: var(--stamp); }
+.pos { border-top: 1px dashed var(--line); padding-block: 10px; display: grid; gap: 4px; min-width: 0; }
+.pos-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: var(--step--1); }
+.pos-head .who { font-weight: 700; }
+.pos-head .stance { font-weight: 700; }
+.pill { font-size: 11px; padding: 0 8px; border-radius: 999px; border: 1px solid currentColor; color: var(--muted); }
+.pill.warn { color: var(--flag-fg); background: var(--flag-bg); border-color: transparent; }
+.match { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); }
+.pos p { font-size: var(--step--1); }
+.pos blockquote { margin: 0; padding-left: 10px; border-left: 2px solid var(--line); font-size: var(--step--1); color: var(--muted); }
+.src { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+
+details.method { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+details.method summary { cursor: pointer; font-weight: 700; }
+details.method[open] summary { margin-bottom: 10px; }
+.method-body { display: grid; gap: 10px; font-size: var(--step--1); }
+.formula { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; background: var(--paper); padding: 8px 10px; border-radius: 6px; overflow-x: auto; }
+
+.toast { font-size: var(--step--1); color: var(--muted); min-height: 1.5em; }
+
+@media (max-width: 420px) {
+  .mast h1 { font-size: var(--step-3); }
+  .statement { font-size: var(--step-2); }
+  .persona h2 { font-size: var(--step-3); }
+  .opt:nth-child(1), .opt:nth-child(5) { --d: 44px; }
+  .opt:nth-child(2), .opt:nth-child(4) { --d: 36px; }
+  .opt:nth-child(3) { --d: 30px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<main class="wrap">
+  <header class="mast">
+    <span class="eyebrow">2026 台北市長選舉 · 11 月 28 日投票</span>
+    <h1>台北市長適配測驗<span class="ring" aria-hidden="true">選</span></h1>
+  </header>
+
+  <div id="preview-flag" class="flag" hidden>預覽模式：目前使用尚未完成人工核對的立場資料，只供內部測試，請勿對外分享結果。</div>
+
+  <!-- Start -->
+  <section id="screen-start" class="stack">
+    <p class="lede">針對台北市政的具體議題，選出你的看法。最後會看到沈伯洋和蔣萬安兩位候選人，誰的立場跟你比較接近，以及每一題的公開來源。</p>
+    <ul class="howto">
+      <li><span>一</span><span>每次從題庫隨機抽題，每個市政面向至少一題。</span></li>
+      <li><span>二</span><span>每題選「非常同意」到「非常不同意」，沒意見可以跳過。</span></li>
+      <li><span>三</span><span>特別在意的題目，勾選「這題對我特別重要」，計分時加重。</span></li>
+    </ul>
+    <div id="start-actions" class="actions"></div>
+    <div id="start-empty" class="flag" hidden></div>
+    <p id="load-error" class="flag" hidden></p>
+  </section>
+
+  <!-- Quiz -->
+  <section id="screen-quiz" class="stack" hidden>
+    <div class="progress">
+      <div class="progress-meta"><span id="q-count"></span><span id="q-dim" class="dim-tag"></span></div>
+      <div class="bar"><i id="q-bar"></i></div>
+    </div>
+    <h2 id="q-text" class="statement"></h2>
+    <p id="q-bg" class="statement-bg" hidden></p>
+    <div>
+      <div class="scale" id="q-scale" role="group" aria-label="你的看法"></div>
+    </div>
+    <div class="quiz-foot">
+      <label class="check"><input type="checkbox" id="q-important"> 這題對我特別重要</label>
+      <div class="navrow">
+        <button class="linkbtn" id="q-prev" type="button">上一題</button>
+        <button class="linkbtn" id="q-skip" type="button">跳過這題</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section id="screen-result" class="stack" hidden>
+    <article class="persona" id="persona"></article>
+    <section class="fit">
+      <h2>候選人適配度</h2>
+      <div id="fit-rows" class="fit"></div>
+      <p class="fit-note" id="fit-note"></p>
+    </section>
+    <div class="actions">
+      <button class="btn" type="button" id="btn-again">換一組題目再玩</button>
+      <button class="btn ghost" type="button" id="btn-full"></button>
+      <button class="btn ghost" type="button" id="btn-share">複製分享文字</button>
+    </div>
+    <p class="toast" id="toast" aria-live="polite"></p>
+    <section class="detail">
+      <h2>逐題比較</h2>
+      <p class="fit-note">每位候選人的立場摘要與來源。標示「未核對」的資料仍在人工查證中。</p>
+      <div id="detail-list" class="detail"></div>
+    </section>
+    <details class="method" id="method">
+      <summary>計分方式與資料來源</summary>
+      <div class="method-body">
+        <p>每個答案與每位候選人的立場都換算成 −2（非常不同意）到 +2（非常同意）。</p>
+        <div class="formula">每題一致度 = 1 − |你的分數 − 候選人分數| ÷ 4<br>適配度 = Σ(一致度 × 權重) ÷ Σ權重</div>
+        <p>勾選「特別重要」的題目權重為 <span id="m-weight">2</span>，其餘為 1。你跳過的題目，以及候選人沒有明確立場的題目，對該候選人不計分。</p>
+        <p>候選人立場來自候選人官方政見、市府資料、辯論與主流媒體報導，每一題都附來源連結。現任市長的立場可能依據任內施政，會在摘要開頭標明「任內實績」或「2026 政見」。</p>
+        <p>候選人的代表色刻意避開政黨色，避免暗示立場。本頁不收集任何個人資料，也不記錄或公布作答統計。</p>
+        <p>發現立場標示有誤？請告訴製作者，我們會查證後更正。</p>
+      </div>
+    </details>
+  </section>
+
+  <p class="disclosure" id="disclosure"></p>
+</main>
+
+<script>
+(() => {
+  const SCALE = [
+    { v: 2, label: "非常同意" },
+    { v: 1, label: "同意" },
+    { v: 0, label: "中立" },
+    { v: -1, label: "不同意" },
+    { v: -2, label: "非常不同意" },
+  ];
+  const STANCE = { "2": "非常同意", "1": "同意", "0": "中立／有條件", "-1": "不同意", "-2": "非常不同意" };
+  const CAND_COLOR = { shen: "var(--c-shen)", chiang: "var(--c-chiang)" };
+  const PERSONA = {
+    "經濟": { name: "城市操盤手", seal: "商", text: "你最在意台北能不能賺錢、留得住人才。看到一塊空地，你想的是它能產生多少工作機會。" },
+    "國際": { name: "世界公民", seal: "世", text: "你覺得台北不只是一座城市，也是台灣面向世界的窗口。城市跟誰往來、怎麼往來，你都有意見。" },
+    "都市發展": { name: "城市規劃控", seal: "城", text: "走在路上，你會注意到哪棟樓該修、哪塊地該重劃。台北二十年後長什麼樣子，是你的日常煩惱。" },
+    "居住": { name: "安居追尋者", seal: "居", text: "房租、房價、租約到期日，是你腦中的常駐程式。你想要的很簡單：在台北有一個安穩的家。" },
+    "食安": { name: "餐桌守門人", seal: "食", text: "吃進嘴裡的東西，你不打算妥協。從營養午餐到夜市小吃，你希望有人在源頭把關。" },
+    "安全韌性": { name: "城市守夜人", seal: "安", text: "颱風、地震、詐騙、斷電，你都想過最壞的情況。你希望這座城市在出事的那一刻撐得住。" },
+    "交通": { name: "通勤戰士", seal: "行", text: "捷運、公車、YouBike、走路，你每天都在跟台北的交通搏鬥。最後一哩路怎麼走，你比誰都清楚。" },
+    "環境": { name: "綠蔭派", seal: "綠", text: "夏天的樹蔭、乾淨的空氣、能散步的公園，對你來說不是奢侈品，是城市的基本配備。" },
+    "育兒教育": { name: "育兒前線指揮官", seal: "育", text: "臨托、午餐、校園安全，你希望台北是一座敢生、也養得起孩子的城市。" },
+    "治理": { name: "市政監督員", seal: "政", text: "你不只想投票，還想知道市府怎麼做決定。透明、參與、效率，是你檢驗市長的三把尺。" },
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+
+  let DATA = null, POOL = [], QUESTIONS = [], ANSWERS = [], idx = 0, mode = "quick";
+  let preview = location.hash === "#preview";
+
+  function parseScore(s) {
+    if (s === "" || s == null) return null;
+    const n = Number(s);
+    return Number.isFinite(n) && n >= -2 && n <= 2 ? n : null;
+  }
+  function splitSources(s) {
+    return String(s || "").split(/[；;\s]+/).map((x) => x.trim()).filter((x) => /^https?:\/\//.test(x));
+  }
+  function toQuestion(r) {
+    const [id, dim, text, enabled, sS, sSum, sQ, sSrc, sDate, sStat, cS, cSum, cQ, cSrc, cDate, cStat, bg] = r;
+    return {
+      id, dim, text, enabled: enabled === "是", bg: bg || "",
+      pos: {
+        shen: { score: parseScore(sS), summary: sSum, quote: sQ, sources: splitSources(sSrc), date: sDate, status: sStat },
+        chiang: { score: parseScore(cS), summary: cSum, quote: cQ, sources: splitSources(cSrc), date: cDate, status: cStat },
+      },
+    };
+  }
+  function buildPool() {
+    const all = DATA.rows.map(toQuestion);
+    POOL = preview
+      ? all.filter((q) => DATA.candidates.some((c) => q.pos[c.key].score !== null))
+      : all.filter((q) => q.enabled);
+  }
+  function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function sample(count) {
+    if (count >= POOL.length) return shuffle(POOL.slice());
+    const byDim = {};
+    POOL.forEach((q) => (byDim[q.dim] = byDim[q.dim] || []).push(q));
+    const picked = [];
+    shuffle(Object.keys(byDim)).forEach((d) => { if (picked.length < count) picked.push(shuffle(byDim[d].slice())[0]); });
+    const rest = shuffle(POOL.filter((q) => !picked.includes(q)));
+    while (picked.length < count && rest.length) picked.push(rest.pop());
+    return shuffle(picked);
+  }
+
+  function show(name) {
+    ["start", "quiz", "result"].forEach((s) => ($("screen-" + s).hidden = s !== name));
+    window.scrollTo({ top: 0 });
+  }
+
+  function renderStart() {
+    $("preview-flag").hidden = !preview;
+    buildPool();
+    const box = $("start-actions");
+    box.replaceChildren();
+    const quick = Math.min(DATA.settings.quickCount, POOL.length);
+    const full = Math.min(DATA.settings.fullCount, POOL.length);
+    if (POOL.length === 0) {
+      $("start-empty").hidden = false;
+      $("start-empty").textContent = "題庫正在進行最後的立場查證，測驗即將開放。";
+      const p = el("button", "linkbtn", "內部預覽：用未核對資料試玩");
+      p.type = "button";
+      p.onclick = () => { preview = true; renderStart(); };
+      $("start-empty").append(" ", p);
+      return;
+    }
+    $("start-empty").hidden = true;
+    const b1 = el("button", "btn"); b1.type = "button";
+    b1.append("開始測驗"); b1.append(el("small", null, quick + " 題"));
+    b1.onclick = () => start("quick");
+    box.append(b1);
+    if (full > quick) {
+      const b2 = el("button", "btn ghost"); b2.type = "button";
+      b2.append("完整版"); b2.append(el("small", null, full + " 題"));
+      b2.onclick = () => start("full");
+      box.append(b2);
+    }
+  }
+
+  function start(m) {
+    mode = m;
+    const n = m === "full" ? DATA.settings.fullCount : DATA.settings.quickCount;
+    QUESTIONS = sample(Math.min(n, POOL.length));
+    ANSWERS = QUESTIONS.map(() => ({ v: undefined, important: false }));
+    idx = 0;
+    renderQuestion();
+    show("quiz");
+  }
+
+  function renderQuestion() {
+    const q = QUESTIONS[idx], a = ANSWERS[idx];
+    $("q-count").textContent = `第 ${idx + 1} / ${QUESTIONS.length} 題`;
+    $("q-dim").textContent = q.dim;
+    $("q-bar").style.width = (idx / QUESTIONS.length) * 100 + "%";
+    $("q-text").textContent = q.text;
+    $("q-bg").hidden = !q.bg; $("q-bg").textContent = q.bg;
+    $("q-important").checked = a.important;
+    $("q-prev").hidden = idx === 0;
+    const sc = $("q-scale");
+    sc.replaceChildren();
+    SCALE.forEach((o) => {
+      const b = el("button", "opt");
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(a.v === o.v));
+      b.append(el("span", "dot"), el("span", null, o.label));
+      b.onclick = () => answer(o.v);
+      sc.append(b);
+    });
+  }
+  function answer(v) {
+    ANSWERS[idx].v = v;
+    ANSWERS[idx].important = $("q-important").checked;
+    renderQuestion();
+    setTimeout(next, 220);
+  }
+  function next() {
+    if (idx < QUESTIONS.length - 1) { idx++; renderQuestion(); }
+    else renderResult();
+  }
+  $("q-important").onchange = (e) => (ANSWERS[idx].important = e.target.checked);
+  $("q-prev").onclick = () => { if (idx > 0) { idx--; renderQuestion(); } };
+  $("q-skip").onclick = () => { ANSWERS[idx].v = null; ANSWERS[idx].important = false; next(); };
+
+  function score() {
+    const w2 = DATA.settings.importantWeight;
+    return DATA.candidates.map((c) => {
+      let num = 0, den = 0, n = 0;
+      QUESTIONS.forEach((q, i) => {
+        const a = ANSWERS[i], p = q.pos[c.key].score;
+        if (a.v == null || p === null) return;
+        const w = a.important ? w2 : 1;
+        num += w * (1 - Math.abs(a.v - p) / 4); den += w; n++;
+      });
+      return { ...c, fit: den ? num / den : null, n };
+    }).sort((x, y) => (y.fit ?? -1) - (x.fit ?? -1));
+  }
+  function persona() {
+    const dimScore = {};
+    QUESTIONS.forEach((q, i) => {
+      const a = ANSWERS[i];
+      if (a.v == null) return;
+      dimScore[q.dim] = (dimScore[q.dim] || 0) + (a.important ? 3 : 0) + Math.abs(a.v) + 0.1;
+    });
+    const dims = shuffle(Object.keys(dimScore)).sort((x, y) => dimScore[y] - dimScore[x]);
+    return PERSONA[dims[0]] || { name: "台北觀察家", seal: "北", text: "你對每個議題都保持開放，還在觀察。看看下面的逐題比較，也許會找到你最在意的事。" };
+  }
+
+  function renderResult() {
+    const P = persona();
+    const box = $("persona");
+    box.replaceChildren(
+      el("div", "seal", P.seal),
+      el("span", "eyebrow", "你的台北人格"),
+      el("h2", null, P.name),
+      el("p", null, P.text),
+    );
+    box.firstChild.setAttribute("aria-hidden", "true");
+
+    const res = score();
+    const rows = $("fit-rows");
+    rows.replaceChildren();
+    res.forEach((r) => {
+      const row = el("div", "fit-row");
+      const head = el("div", "fit-head");
+      const name = el("span", "fit-name", r.name); name.append(el("small", null, r.party));
+      head.append(name, el("span", "fit-pct", r.fit == null ? "—" : Math.round(r.fit * 100) + "%"));
+      const bar = el("div", "fit-bar"); const fill = el("i");
+      fill.style.width = r.fit == null ? "0" : (r.fit * 100).toFixed(1) + "%";
+      fill.style.background = CAND_COLOR[r.key];
+      bar.append(fill);
+      row.append(head, bar, el("span", "fit-note", r.fit == null ? "這組題目沒有足夠資料計算" : `依據 ${r.n} 題計算`));
+      rows.append(row);
+    });
+    const answered = ANSWERS.filter((a) => a.v != null).length;
+    $("fit-note").textContent = `你回答了 ${answered} / ${QUESTIONS.length} 題。題目每次隨機抽出，換一組題目結果可能略有不同。`;
+    const fullN = Math.min(DATA.settings.fullCount, POOL.length);
+    $("btn-full").textContent = mode === "full" ? "再做一次完整版" : `做完整版（${fullN} 題）`;
+    $("btn-full").hidden = mode !== "full" && fullN <= QUESTIONS.length;
+
+    const list = $("detail-list");
+    list.replaceChildren();
+    QUESTIONS.forEach((q, i) => {
+      const a = ANSWERS[i];
+      const card = el("article", "qcard");
+      card.append(el("span", "dim-tag", q.dim));
+      card.append(el("h3", null, q.text));
+      const you = el("p", "you", "你的看法：");
+      you.append(el("b", null, a.v == null ? "跳過" : STANCE[String(a.v)]));
+      if (a.important && a.v != null) you.append("（特別重要）");
+      card.append(you);
+      res.forEach((c) => {
+        const p = q.pos[c.key];
+        const pos = el("div", "pos");
+        const head = el("div", "pos-head");
+        const who = el("span", "who", c.name); who.style.color = CAND_COLOR[c.key];
+        head.append(who, el("span", "stance", p.score === null ? "無明確立場" : STANCE[String(p.score)]));
+        if (p.status !== "已核對") head.append(el("span", "pill warn", "未核對"));
+        if (a.v != null && p.score !== null) head.append(el("span", "match", "一致度 " + Math.round((1 - Math.abs(a.v - p.score) / 4) * 100) + "%"));
+        pos.append(head);
+        if (p.summary) pos.append(el("p", null, p.summary));
+        if (p.quote) pos.append(el("blockquote", null, "「" + p.quote + "」"));
+        if (p.sources.length) {
+          const src = el("div", "src");
+          src.append(el("span", null, "來源" + (p.date ? "（" + p.date + "）" : "") + "："));
+          p.sources.forEach((u, k) => {
+            const link = el("a", null, (() => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return "連結 " + (k + 1); } })());
+            link.href = u; link.target = "_blank"; link.rel = "noopener";
+            src.append(link);
+          });
+          pos.append(src);
+        }
+        card.append(pos);
+      });
+      list.append(card);
+    });
+    $("q-bar").style.width = "100%";
+    show("result");
+  }
+
+  $("btn-again").onclick = () => start(mode);
+  $("btn-full").onclick = () => start("full");
+  $("btn-share").onclick = () => {
+    const P = persona();
+    const url = location.href.split("#")[0];
+    const text = `我的台北人格是「${P.name}」。來做台北市長適配測驗，看看哪位候選人的立場跟你比較接近：${url}`;
+    const done = (msg) => ($("toast").textContent = msg);
+    try {
+      navigator.clipboard.writeText(text).then(() => done("已複製分享文字。"), () => done(text));
+    } catch { done(text); }
+  };
+  window.addEventListener("hashchange", () => { preview = location.hash === "#preview"; renderStart(); show("start"); });
+
+  fetch("data.json", { cache: "no-store" })
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then((d) => {
+      DATA = d;
+      $("disclosure").textContent = d.settings.disclosure + (d.exportedAt ? ` 資料更新：${d.exportedAt}` : "");
+      $("m-weight").textContent = d.settings.importantWeight;
+      renderStart();
+    })
+    .catch(() => {
+      $("load-error").hidden = false;
+      $("load-error").textContent = "題庫載入失敗，請重新整理頁面。";
+    });
+})();
+</script>
