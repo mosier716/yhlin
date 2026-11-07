@@ -4,3 +4,6 @@
 
 ### macOS
 .DS_Store
+
+### Generated images (openai-image skill)
+/generated-images/
